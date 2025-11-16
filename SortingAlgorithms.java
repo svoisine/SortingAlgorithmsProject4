@@ -315,12 +315,72 @@ public class SortingAlgorithms {
      * This class sorts the inputted array list via a quick sort where
      * the pivot is a RANDOM value.
      * 
+     * This class works the exact same as the other quick sort but instead once
+     * you call splitRandom() it will find a random variable within the array
+     * to be the pivot value and swap it to the front instead of just assuming
+     * the first value is the pivot value.
+     * 
+     * 
+     * 
      * param - ArrayList<Integer> valuesToSort
      * 
      * @return - long comparisons
      */
-    public long quickSortRP(ArrayList<Integer> valuesToSort) {
+    public long quickSortRP(ArrayList<Integer> valuesToSort, int low, int high) {
         long comparisons = 0;
+
+        // Base case || only difference from other quicksort is that it calls
+        // splitRandom() instead of split
+        if (low < high) {
+            SplitResult result = splitRandom(valuesToSort, low, high);
+            comparisons += result.comparisons;
+
+            // Recursively sort both halves
+            comparisons += quickSortRP(valuesToSort, low, result.pivotIndex - 1);
+            comparisons += quickSortRP(valuesToSort, result.pivotIndex + 1, high);
+        }
         return comparisons;
+    }
+
+    /*
+     * Helper function that splits the array and swaps the values around the pivot.
+     * 
+     * param - ArrayList<Integer> valuesToSort, int low, int high
+     * 
+     * @return - SplitResult
+     */
+    public SplitResult splitRandom(ArrayList<Integer> valuesToSort, int low, int high) {
+        // Find a random pivot using Math.random()
+        int randomIndex = low + (int) (Math.random() * (high - low + 1));
+
+        // Swap the pivot into the first value
+        int temp = valuesToSort.get(low);
+        valuesToSort.set(low, valuesToSort.get(randomIndex));
+        valuesToSort.set(randomIndex, temp);
+
+        // Do the exact same thing as the split() method to iterate through the values
+        // to compare then swap
+        int pivot = valuesToSort.get(low);
+        int i = low + 1;
+        long comparisons = 0;
+
+        // Rearrange the array
+        for (int j = low + 1; j <= high; j++) {
+            comparisons++;
+            if (valuesToSort.get(j) < pivot) {
+                int t = valuesToSort.get(i);
+                valuesToSort.set(i, valuesToSort.get(j));
+                valuesToSort.set(j, t);
+                i++;
+            }
+        }
+
+        // Swap pivot value to sorted position
+        int temp2 = valuesToSort.get(low);
+        valuesToSort.set(low, valuesToSort.get(i - 1));
+        valuesToSort.set(i - 1, temp2);
+
+        // Return pivot index and the number of comparisons made
+        return new SplitResult(i - 1, comparisons);
     }
 }
