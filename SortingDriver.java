@@ -1,5 +1,5 @@
 /*
- * Class SortingAlgorithmsDriver
+ * Class SortingDriver
  * 
  * This class is used to run the SortingAlgorithmsProgram.
  * 

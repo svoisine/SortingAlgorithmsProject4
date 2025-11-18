@@ -1,5 +1,5 @@
 /*
- * Class SortingAlgorithms
+ * Class Sorting
  * 
  * This class is used to house all 4 types of sorting algorithms.
  * Selection Sort, Merge Sort, Heap Sort and Quick Sort
@@ -13,7 +13,7 @@
 
 import java.util.ArrayList;
 
-public class SortingAlgorithms {
+public class Sorting {
 
     /*
      * Constructor for SortingAlgorithms class.
@@ -22,7 +22,7 @@ public class SortingAlgorithms {
      * 
      * @return - none
      */
-    public SortingAlgorithms() {
+    public Sorting() {
     }
 
     /*
