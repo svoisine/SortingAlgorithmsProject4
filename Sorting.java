@@ -154,7 +154,7 @@ public class SortingAlgorithms {
      * Heap Sort is when you build a max heap and then recursively find the
      * max or minimum element and swap it with the last or first element.
      * 
-     * Heap Sort - O(n logn) because constructing the max heap is O(n) and
+     * Heap Sort - O(nlogn) because constructing the max heap is O(n) and
      * extracting the elements you repeated remove the max value, and swap
      * it with the last elementto reduce the heap.
      * To reduce the heap you have to swap n amount of times through the height of
@@ -182,7 +182,7 @@ public class SortingAlgorithms {
 
             // Move current root to the end
             int temp = valuesToSort.get(0);
-            valuesToSort.set(0, i);
+            valuesToSort.set(0, valuesToSort.get(i));
             valuesToSort.set(i, temp);
 
             // Reduce the heap
@@ -208,19 +208,15 @@ public class SortingAlgorithms {
         int right = 2 * i + 2;
 
         // If left is larger than the root
-        if (left < n) {
+        if (left < n && valuesToSort.get(left) > valuesToSort.get(largest)) {
             comparisons++;
-            if (valuesToSort.get(left) > valuesToSort.get(right)) {
-                largest = left;
-            }
+            largest = left;
         }
 
         // If right is larger than the largest so far
-        if (right < n) {
+        if (right < n && valuesToSort.get(right) > valuesToSort.get(largest)) {
             comparisons++;
-            if (valuesToSort.get(right) > valuesToSort.get(largest)) {
-                largest = right;
-            }
+            largest = right;
         }
 
         // If largest is not the root
@@ -265,14 +261,19 @@ public class SortingAlgorithms {
         long comparisons = 0;
 
         // Base case
-        if (low < high) {
+        while (low < high) {
             // Split the array and get pivot index of each half
             SplitResult result = split(valuesToSort, low, high);
             comparisons += result.comparisons;
 
-            // Recursively sort both halves
-            comparisons += quickSortFP(valuesToSort, low, result.pivotIndex - 1);
-            comparisons += quickSortFP(valuesToSort, result.pivotIndex + 1, high);
+            // Recursively sort the smaller half so that the stack depth is O(log n)
+            if (result.pivotIndex - low < high - result.pivotIndex) {
+                comparisons += quickSortFP(valuesToSort, low, result.pivotIndex - 1);
+                low = result.pivotIndex + 1;
+            } else {
+                comparisons += quickSortFP(valuesToSort, result.pivotIndex + 1, high);
+                high = result.pivotIndex - 1;
+            }
         }
 
         return comparisons;
